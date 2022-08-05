@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  react-app:
+    container_name: react-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./app:/user/src/app
+    ports:
+      - 3000:3000
+    working_dir: /user/src/app
+    command: sh -c "yarn start"
+    tty: true
+    stdin_open: true
