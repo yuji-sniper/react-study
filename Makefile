@@ -10,7 +10,7 @@ react:
 
 # React
 react-install:
-	docker compose run --rm react-app yarn global add create-react-app && npx create-react-app app --template typescript
+	docker compose run --rm react-app sh -c "yarn global add create-react-app && yarn create react-app . --template typescript"
 yarn-ci:
 	docker compose run --rm react-app yarn install --immutable --immutable-cache --check-cache
 
