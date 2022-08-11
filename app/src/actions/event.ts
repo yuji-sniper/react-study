@@ -2,6 +2,7 @@ import { Action, Dispatch } from "redux";
 import actionCreatorFactory, { AnyAction } from "typescript-fsa";
 import axios, { AxiosResponse } from "axios"
 import { Event } from "../types/Event";
+import { EventNewInputValues } from "../components/event/EventNew";
 
 const actionCreator = actionCreatorFactory()
 
@@ -14,6 +15,13 @@ export const eventActions = {
         return async (dispatch: Dispatch) => {
             const response: AxiosResponse<Event[]> = await axios.get(`${ROOT_URL}/events${QUERY_STRING}`)
             dispatch(eventActions.readEvents(response.data))
+        }
+    },
+    createEvent: actionCreator<AxiosResponse<Event>>('CREATE_EVENT'),
+    createEventAsync: (values: EventNewInputValues) => {
+        return async (dispatch: Dispatch) => {
+            const response: AxiosResponse<Event> = await axios.post(`${ROOT_URL}/events${QUERY_STRING}`, values)
+            dispatch(eventActions.createEvent(response))
         }
     }
 }

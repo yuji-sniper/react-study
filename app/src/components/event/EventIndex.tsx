@@ -14,7 +14,7 @@ class EventIndex extends React.Component<Props> {
     componentDidMount() {
         this.props.readEvents()
     }
-    
+
     render() {
         return (
             <React.Fragment>
