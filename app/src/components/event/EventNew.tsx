@@ -65,20 +65,16 @@ class EventNew extends React.Component<EventNewFormProps> {
 const validate = (values: EventNewInputValues) => {
     const errors: {[key in keyof EventNewInputValues]: string} = {}
 
-    const titleRules: Rules = {
+    errors.title = executeValidate(values.title, {
         required: { message: 'タイトルを入力してください' },
         min: { min: 3, message: 'タイトルは３文字以上で入力してください' },
         max: { max: 10, message: 'タイトルは10文字以内で入力してください' }
-    }
-
-    const bodyRules: Rules = {
+    })
+    errors.body = executeValidate(values.body, {
         required: { message: 'ボディを入力してください' },
         min: { min: 5, message: 'ボディは5文字以上で入力してください' },
         max: { max: 12, message: 'ボディは12文字以内で入力してください' }
-    }
-
-    errors.title = executeValidate(values.title, titleRules)
-    errors.body = executeValidate(values.body, bodyRules)
+    })
 
     return errors
 }
