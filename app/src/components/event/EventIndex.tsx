@@ -1,18 +1,24 @@
 import React from "react";
-import { EventIndexHandler } from "../../containers/event/EventIndexContainer";
-import { EventIndexState } from "../../reducers/event/eventIndex";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { eventActions } from "../../actions/event";
+import { AppState } from "../../store";
 import { Event } from "../../types/Event";
 
-type PropsType = EventIndexState & EventIndexHandler
+interface Props {
+    events: Event[]
+    readEvents(): void
+}
 
-export class EventIndex extends React.Component<PropsType> {
+class EventIndex extends React.Component<Props> {
     componentDidMount() {
         this.props.readEvents()
     }
-    
+
     render() {
         return (
             <React.Fragment>
+                <Link to="/events/new">新規イベント</Link>
                 <h1>「イベント一覧」</h1>
                 {this.props.events.map((event) => {
                     return (
@@ -27,3 +33,19 @@ export class EventIndex extends React.Component<PropsType> {
         )
     }
 }
+
+const mapStateToProps = (appState: AppState) => {
+    return {
+        events: appState.eventIndexState.events
+    }
+}
+
+const mapDispatchToProps = (dispatch: Function) => {
+    return {
+        readEvents: () => {
+            dispatch(eventActions.readEventsAsync())
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EventIndex)
