@@ -1,5 +1,5 @@
-import { Action, Dispatch } from "redux";
-import actionCreatorFactory, { AnyAction } from "typescript-fsa";
+import { Dispatch } from "redux";
+import actionCreatorFactory from "typescript-fsa";
 import axios, { AxiosResponse } from "axios"
 import { Event } from "../types/Event";
 import { EventNewInputValues } from "../components/event/EventNew";
