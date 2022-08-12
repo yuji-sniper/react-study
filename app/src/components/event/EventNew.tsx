@@ -63,10 +63,7 @@ class EventNew extends React.Component<EventNewFormProps> {
 
 // バリデーション
 const validate = (values: EventNewInputValues) => {
-    const errors: {
-        title?: string
-        body?: string
-    } = {}
+    const errors: {[key in keyof EventNewInputValues]: string} = {}
 
     const titleRules: Rules = {
         required: { message: 'タイトルを入力してください' },
