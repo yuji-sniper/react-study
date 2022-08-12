@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import { ConfigProps, Field, InjectedFormProps, reduxForm, WrappedFieldProps } from "redux-form";
 import { eventActions } from "../../actions/event";
+import { RenderField } from "../../field/RenderField";
+import { executeValidate, Rules } from "../../validation/validation";
 
 export interface EventNewInputValues {
     title?: string
@@ -30,16 +32,6 @@ class EventNew extends React.Component<EventNewFormProps> {
         this.onSubmit = this.onSubmit.bind(this)
     }
 
-    renderField(field: FieldProps) {
-        const { input, label, type, meta: { touched, error } } = field
-        return (
-            <div>
-                <input {...input} placeholder={label} type={type}/>
-                {touched && error && <span>{error}</span>}
-            </div>
-        )
-    }
-
     async onSubmit(values: EventNewInputValues) {
         await this.props.createEvent(values)
         this.setState({ isEventCreated: true })
@@ -57,10 +49,10 @@ class EventNew extends React.Component<EventNewFormProps> {
                 )}
                 <form onSubmit={handleSubmit(this.onSubmit)}>
                     <div>
-                        <Field label="Title" name="title" type="text" component={this.renderField} />
+                        <Field label="Title" name="title" type="text" component={RenderField} />
                     </div>
                     <div>
-                        <Field label="Body" name="body" type="text" component={this.renderField} />
+                        <Field label="Body" name="body" type="text" component={RenderField} />
                     </div>
                     <div>
                         <input type="submit" value="Submit" disabled={false}/>
@@ -74,17 +66,27 @@ class EventNew extends React.Component<EventNewFormProps> {
     }
 }
 
-/**
- * バリデーション
- */
+// バリデーション
 const validate = (values: EventNewInputValues) => {
     const errors: {
         title?: string
         body?: string
     } = {}
 
-    if (!values.title) errors.title = 'タイトルを入力してください'
-    if (!values.body) errors.body = '内容を入力してください'
+    const titleRules: Rules = {
+        required: { message: 'タイトルを入力してください' },
+        min: { min: 3, message: 'タイトルは３文字以上で入力してください' },
+        max: { max: 10, message: 'タイトルは10文字以内で入力してください' }
+    }
+
+    const bodyRules: Rules = {
+        required: { message: 'ボディを入力してください' },
+        min: { min: 5, message: 'ボディは5文字以上で入力してください' },
+        max: { max: 12, message: 'ボディは12文字以内で入力してください' }
+    }
+
+    errors.title = executeValidate(values.title, titleRules)
+    errors.body = executeValidate(values.body, bodyRules)
 
     return errors
 }
