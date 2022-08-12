@@ -1,13 +1,10 @@
-// バリデータの型
-interface Validators {
-    [key: string]: Function
-}
+import { validators } from "./validator"
 
 // 入力値の型
 type ValidateValue = string|number|[]|undefined
 
 // バリデーションルールの型
-export type Rules = {[key in keyof Validators]: {[s: string]: string|number}}
+export type Rules = {[key: string]: {[key: string]: string|number}}
 
 // パラメータが不要なバリデーションルール
 const noParamValidations: string[] = [
@@ -19,27 +16,6 @@ const oneParamValidations: string[] = [
     'min',
     'max',
 ]
-
-// バリデータ
-const validators: Validators = {
-    'required': (value: ValidateValue, message: string) => {
-        return !value ? message : undefined
-    },
-    'min': (value: ValidateValue, min: number, message: string) => {
-        if (typeof value === 'string' || typeof value === 'object') {
-            return (value && value.length < min) ? message : undefined
-        } else if (typeof value === 'number') {
-            return (value && value < min) ? message : undefined
-        }
-    },
-    'max': (value: ValidateValue, max: number, message: string) => {
-        if (typeof value === 'string' || typeof value === 'object') {
-            return (value && value.length > max) ? message : undefined
-        } else if (typeof value === 'number') {
-            return (value && value > max) ? message : undefined
-        }
-    },
-}
 
 // バリデーションを実行してエラーメッセージを返す
 export const executeValidate = (value: ValidateValue, rules: Rules): string|undefined => {
