@@ -17,11 +17,6 @@ interface DispatchProps {
 
 type EventNewFormProps = InjectedFormProps<EventNewInputValues, DispatchProps> & DispatchProps
 
-interface FieldProps extends WrappedFieldProps {
-    label: string
-    type: string
-}
-
 class EventNew extends React.Component<EventNewFormProps> {
     state = {
         isEventCreated: false
@@ -38,7 +33,7 @@ class EventNew extends React.Component<EventNewFormProps> {
     }
 
     render() {
-        const { handleSubmit } = this.props
+        const { handleSubmit, invalid, submitting } = this.props
         let { isEventCreated } = this.state
         return (
             <React.Fragment>
@@ -55,7 +50,7 @@ class EventNew extends React.Component<EventNewFormProps> {
                         <Field label="Body" name="body" type="text" component={RenderField} />
                     </div>
                     <div>
-                        <input type="submit" value="Submit" disabled={false}/>
+                        <input type="submit" value="Submit" disabled={invalid || submitting}/>
                         <div>
                             <Link to="/">キャンセル</Link>
                         </div>
