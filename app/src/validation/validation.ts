@@ -1,56 +1,51 @@
-// バリデータの型
-interface Validators {
-    [key: string]: Function
-}
+import { messageReplacers } from "./replacer"
+import { validators } from "./validator"
 
-// 入力値の型
+// 各入力値の型
 type ValidateValue = string|number|[]|undefined
 
-// バリデーションルールの型
-export type Rules = {[key in keyof Validators]: {[s: string]: string|number}}
+// 入力値の型
+export type InputValues = {[key: string]: ValidateValue}
 
-// パラメータが不要なバリデーションルール
+// バリデーションルールの型
+type Rules = {[key: string]: {param?: string|number|[], message: string}}
+
+// パラメータが不要なバリデーション
 const noParamValidations: string[] = [
     'required',
+    'email'
 ]
 
-// パラメータが１つ必要なバリデーションルール
-const oneParamValidations: string[] = [
+// パラメータが必要なバリデーション
+const requireParamValidations: string[] = [
     'min',
     'max',
+    'regex'
 ]
 
-// バリデータ
-const validators: Validators = {
-    'required': (value: ValidateValue, message: string) => {
-        return !value ? message : undefined
-    },
-    'min': (value: ValidateValue, min: number, message: string) => {
-        if (typeof value === 'string' || typeof value === 'object') {
-            return (value && value.length < min) ? message : undefined
-        } else if (typeof value === 'number') {
-            return (value && value < min) ? message : undefined
-        }
-    },
-    'max': (value: ValidateValue, max: number, message: string) => {
-        if (typeof value === 'string' || typeof value === 'object') {
-            return (value && value.length > max) ? message : undefined
-        } else if (typeof value === 'number') {
-            return (value && value > max) ? message : undefined
-        }
-    },
+// バリデーションを実行しエラーメッセージを返す
+export const validateForm = <T extends InputValues> (
+        values: T,
+        validationRules: {[key in keyof T]: Rules}): {[key in keyof T]?: string|undefined} => {
+    const errors: {[key in keyof T]?: string|undefined} = {}
+    for (const form in validationRules) {
+        errors[form] = validateEach(values[form], validationRules[form])
+    }
+    return errors
 }
 
-// バリデーションを実行してエラーメッセージを返す
-export const executeValidate = (value: ValidateValue, rules: Rules): string|undefined => {
+// 各フォームのバリデーションを実行してエラーメッセージを返す
+const validateEach = (value: ValidateValue, rules: Rules): string|undefined => {
     for (const ruleName in rules) {
         const rule = rules[ruleName]
-        let msg: string|undefined = 
-            (noParamValidations.includes(ruleName)) ?
+        const message = (noParamValidations.includes(ruleName)) ?
                 validators[ruleName](value, rule.message)
-            : (oneParamValidations.includes(ruleName)) ?
-                validators[ruleName](value, rule[ruleName], rule.message)
+            : (requireParamValidations.includes(ruleName)) ?
+                validators[ruleName](value, rule.param, rule.message)
             : undefined
-        if (msg) return msg
+        if (message) {
+            return ruleName in messageReplacers ?
+                messageReplacers[ruleName](message, rule.param) : message
+        }
     }
 }
