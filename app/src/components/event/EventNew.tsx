@@ -18,6 +18,7 @@ interface DispatchProps {
 type EventNewFormProps = InjectedFormProps<EventNewInputValues, DispatchProps> & DispatchProps
 
 class EventNew extends React.Component<EventNewFormProps> {
+    // これ汚い！！！！
     state = {
         isEventCreated: false
     }
@@ -53,9 +54,7 @@ class EventNew extends React.Component<EventNewFormProps> {
                         </div>
                     </div>
                 </form>
-                {isEventCreated && (
-                    <Navigate to="/" />
-                )}
+                {isEventCreated && (<Navigate to="/" />)}
             </React.Fragment>
         )
     }

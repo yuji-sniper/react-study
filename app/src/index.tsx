@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import EventNew from './components/event/EventNew';
 import EventIndex from './components/event/EventIndex';
+import EventShow from './components/event/EventShow';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -16,6 +17,7 @@ root.render(
       <Routes>
         <Route path="/" element={<EventIndex/>}/>
         <Route path="/events/new" element={<EventNew/>}/>
+        <Route path="/event/:id" element={<EventShow/>}/>
       </Routes>
     </BrowserRouter>
   </Provider>

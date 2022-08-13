@@ -23,7 +23,12 @@ class EventIndex extends React.Component<Props> {
                 {this.props.events.map((event) => {
                     return (
                         <div key={event.id}>
-                            <h3>{event.id}：{event.title}</h3>
+                            <h3>{event.id}</h3>
+                            <p>
+                                <Link to={`/event/${event.id}`}>
+                                    {event.title}
+                                </Link>
+                            </p>
                             <p>{event.body}</p>
                             <hr></hr>
                         </div>

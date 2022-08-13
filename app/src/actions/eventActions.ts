@@ -23,5 +23,13 @@ export const eventActions = {
             const response: AxiosResponse<Event> = await axios.post(`${ROOT_URL}/events${QUERY_STRING}`, values)
             dispatch(eventActions.createEvent(response))
         }
-    }
+    },
+    deleteEvent: actionCreator<AxiosResponse>('DELETE_EVENT'),
+    deleteEventAsync: (id: string) => {
+        return async (dispatch: Dispatch) => {
+            const response: AxiosResponse = await axios.delete(`${ROOT_URL}/events/${id}${QUERY_STRING}`)
+            dispatch(eventActions.deleteEvent(response))
+        }
+    },
+    initEventShowState: actionCreator('INIT_EVENT_SHOW_STATE')
 }
