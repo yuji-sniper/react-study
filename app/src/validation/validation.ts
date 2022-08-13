@@ -1,7 +1,11 @@
+import { messageReplacers } from "./replacer"
 import { validators } from "./validator"
 
-// 入力値の型
+// 各入力値の型
 type ValidateValue = string|number|[]|undefined
+
+// 入力値の型
+export type InputValue = {[key: string]: ValidateValue}
 
 // バリデーションルールの型
 export type Rules = {[key: string]: {param?: string|number|[], message: string}}
@@ -19,16 +23,30 @@ const requireParamValidations: string[] = [
     'regex'
 ]
 
-// バリデーションを実行してエラーメッセージを返す
-export const executeValidate = (value: ValidateValue, rules: Rules): string|undefined => {
+// バリデーションを実行しエラーメッセージを返す
+export const validateForm = <T extends InputValue> (
+        values: T,
+        validationRules: {[key in keyof T]: Rules}): {[key in keyof T]?: string|undefined} => {
+    const errors: {[key in keyof T]?: string|undefined} = {}
+    for (const form in validationRules) {
+        errors[form] = validateEach(values[form], validationRules[form])
+    }
+    console.log(errors)
+    return errors
+}
+
+// 各フォームのバリデーションを実行してエラーメッセージを返す
+export const validateEach = (value: ValidateValue, rules: Rules): string|undefined => {
     for (const ruleName in rules) {
         const rule = rules[ruleName]
-        let msg: string|undefined = 
-            (noParamValidations.includes(ruleName)) ?
+        const message = (noParamValidations.includes(ruleName)) ?
                 validators[ruleName](value, rule.message)
             : (requireParamValidations.includes(ruleName)) ?
                 validators[ruleName](value, rule.param, rule.message)
             : undefined
-        if (msg) return msg
+        if (message) {
+            return ruleName in messageReplacers ?
+                messageReplacers[ruleName](message, rule.param) : message
+        }
     }
 }

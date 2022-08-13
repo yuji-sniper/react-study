@@ -4,9 +4,9 @@ import { Link, Navigate } from "react-router-dom";
 import { ConfigProps, Field, InjectedFormProps, reduxForm, WrappedFieldProps } from "redux-form";
 import { eventActions } from "../../actions/event";
 import { RenderField } from "../../field/RenderField";
-import { executeValidate, Rules } from "../../validation/validation";
+import { InputValue, validateForm } from "../../validation/validation";
 
-export interface EventNewInputValues {
+export interface EventNewInputValues extends InputValue {
     title?: string
     body?: string
 }
@@ -61,22 +61,19 @@ class EventNew extends React.Component<EventNewFormProps> {
     }
 }
 
-// バリデーション
 const validate = (values: EventNewInputValues) => {
-    const errors: {[key in keyof EventNewInputValues]: string} = {}
-
-    errors.title = executeValidate(values.title, {
-        required: { message: 'タイトルを入力してください' },
-        min: { param: 3, message: 'タイトルは３文字以上で入力してください' },
-        max: { param: 10, message: 'タイトルは10文字以内で入力してください' },
+    return validateForm<EventNewInputValues>(values, {
+        title: {
+            required: { message: 'タイトルを入力してください' },
+            min: { param: 3, message: 'タイトルは:min文字以上で入力してください' },
+            max: { param: 10, message: 'タイトルは:max文字以内で入力してください' }
+        },
+        body: {
+            required: { message: 'ボディを入力してください' },
+            min: { param: 5, message: 'ボディは:min文字以上で入力してください' },
+            max: { param: 12, message: 'ボディは:max文字以内で入力してください' }
+        }
     })
-    errors.body = executeValidate(values.body, {
-        required: { message: 'ボディを入力してください' },
-        min: { param: 5, message: 'ボディは5文字以上で入力してください' },
-        max: { param: 12, message: 'ボディは12文字以内で入力してください' }
-    })
-
-    return errors
 }
 
 const mapStateToProps = (): ConfigProps<EventNewInputValues, DispatchProps> => {
