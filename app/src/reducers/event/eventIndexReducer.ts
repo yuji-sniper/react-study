@@ -6,7 +6,7 @@ export interface EventIndexState {
     events: Event[]
 }
 
-export const initialState: EventIndexState = {
+const initialState: EventIndexState = {
     events: []
 }
 

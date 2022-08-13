@@ -39,9 +39,6 @@ class EventNew extends React.Component<EventNewFormProps> {
             <React.Fragment>
                 <Link to="/">イベント一覧</Link>
                 <h1>新規イベント作成</h1>
-                {isEventCreated && (
-                    <Navigate to="/" />
-                )}
                 <form onSubmit={handleSubmit(this.onSubmit)}>
                     <div>
                         <Field label="Title" name="title" type="text" component={RenderField} />
@@ -56,6 +53,9 @@ class EventNew extends React.Component<EventNewFormProps> {
                         </div>
                     </div>
                 </form>
+                {isEventCreated && (
+                    <Navigate to="/" />
+                )}
             </React.Fragment>
         )
     }
