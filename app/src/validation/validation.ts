@@ -31,7 +31,6 @@ export const validateForm = <T extends InputValue> (
     for (const form in validationRules) {
         errors[form] = validateEach(values[form], validationRules[form])
     }
-    console.log(errors)
     return errors
 }
 
