@@ -8,7 +8,7 @@ type ValidateValue = string|number|[]|undefined
 export type InputValue = {[key: string]: ValidateValue}
 
 // バリデーションルールの型
-export type Rules = {[key: string]: {param?: string|number|[], message: string}}
+type Rules = {[key: string]: {param?: string|number|[], message: string}}
 
 // パラメータが不要なバリデーション
 const noParamValidations: string[] = [
@@ -36,7 +36,7 @@ export const validateForm = <T extends InputValue> (
 }
 
 // 各フォームのバリデーションを実行してエラーメッセージを返す
-export const validateEach = (value: ValidateValue, rules: Rules): string|undefined => {
+const validateEach = (value: ValidateValue, rules: Rules): string|undefined => {
     for (const ruleName in rules) {
         const rule = rules[ruleName]
         const message = (noParamValidations.includes(ruleName)) ?
