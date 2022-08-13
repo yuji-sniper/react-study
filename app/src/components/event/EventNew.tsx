@@ -4,9 +4,9 @@ import { Link, Navigate } from "react-router-dom";
 import { ConfigProps, Field, InjectedFormProps, reduxForm, WrappedFieldProps } from "redux-form";
 import { eventActions } from "../../actions/event";
 import { RenderField } from "../../field/RenderField";
-import { InputValue, validateForm } from "../../validation/validation";
+import { InputValues, validateForm } from "../../validation/validation";
 
-export interface EventNewInputValues extends InputValue {
+export interface EventNewInputValues extends InputValues {
     title?: string
     body?: string
 }

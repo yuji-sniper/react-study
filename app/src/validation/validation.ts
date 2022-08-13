@@ -5,7 +5,7 @@ import { validators } from "./validator"
 type ValidateValue = string|number|[]|undefined
 
 // 入力値の型
-export type InputValue = {[key: string]: ValidateValue}
+export type InputValues = {[key: string]: ValidateValue}
 
 // バリデーションルールの型
 type Rules = {[key: string]: {param?: string|number|[], message: string}}
@@ -24,7 +24,7 @@ const requireParamValidations: string[] = [
 ]
 
 // バリデーションを実行しエラーメッセージを返す
-export const validateForm = <T extends InputValue> (
+export const validateForm = <T extends InputValues> (
         values: T,
         validationRules: {[key in keyof T]: Rules}): {[key in keyof T]?: string|undefined} => {
     const errors: {[key in keyof T]?: string|undefined} = {}
