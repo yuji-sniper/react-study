@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { eventActions } from "../../actions/event";
+import { eventActions } from "../../actions/eventActions";
 import { AppState } from "../../store";
 import { Event } from "../../types/Event";
 

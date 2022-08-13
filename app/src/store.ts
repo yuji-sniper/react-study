@@ -2,7 +2,7 @@ import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import * as ReduxForm from "redux-form";
 import thunk from "redux-thunk";
 import { CountReducer, CountState } from "./reducers/count"
-import { EventIndexReducer, EventIndexState } from "./reducers/event/eventIndex";
+import { EventIndexReducer, EventIndexState } from "./reducers/event/eventIndexReducer";
 
 export type AppState = {
     countState: CountState

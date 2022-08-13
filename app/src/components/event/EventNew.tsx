@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import { ConfigProps, Field, InjectedFormProps, reduxForm, WrappedFieldProps } from "redux-form";
-import { eventActions } from "../../actions/event";
+import { eventActions } from "../../actions/eventActions";
 import { RenderField } from "../../field/RenderField";
 import { InputValues, validateForm } from "../../validation/validation";
 
