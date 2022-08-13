@@ -4,17 +4,19 @@ import { validators } from "./validator"
 type ValidateValue = string|number|[]|undefined
 
 // バリデーションルールの型
-export type Rules = {[key: string]: {[key: string]: string|number}}
+export type Rules = {[key: string]: {param?: string|number|[], message: string}}
 
-// パラメータが不要なバリデーションルール
+// パラメータが不要なバリデーション
 const noParamValidations: string[] = [
     'required',
+    'email'
 ]
 
-// パラメータが１つ必要なバリデーションルール
-const oneParamValidations: string[] = [
+// パラメータが必要なバリデーション
+const requireParamValidations: string[] = [
     'min',
     'max',
+    'regex'
 ]
 
 // バリデーションを実行してエラーメッセージを返す
@@ -24,8 +26,8 @@ export const executeValidate = (value: ValidateValue, rules: Rules): string|unde
         let msg: string|undefined = 
             (noParamValidations.includes(ruleName)) ?
                 validators[ruleName](value, rule.message)
-            : (oneParamValidations.includes(ruleName)) ?
-                validators[ruleName](value, rule[ruleName], rule.message)
+            : (requireParamValidations.includes(ruleName)) ?
+                validators[ruleName](value, rule.param, rule.message)
             : undefined
         if (msg) return msg
     }

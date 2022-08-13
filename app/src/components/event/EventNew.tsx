@@ -67,13 +67,13 @@ const validate = (values: EventNewInputValues) => {
 
     errors.title = executeValidate(values.title, {
         required: { message: 'タイトルを入力してください' },
-        min: { min: 3, message: 'タイトルは３文字以上で入力してください' },
-        max: { max: 10, message: 'タイトルは10文字以内で入力してください' }
+        min: { param: 3, message: 'タイトルは３文字以上で入力してください' },
+        max: { param: 10, message: 'タイトルは10文字以内で入力してください' },
     })
     errors.body = executeValidate(values.body, {
         required: { message: 'ボディを入力してください' },
-        min: { min: 5, message: 'ボディは5文字以上で入力してください' },
-        max: { max: 12, message: 'ボディは12文字以内で入力してください' }
+        min: { param: 5, message: 'ボディは5文字以上で入力してください' },
+        max: { param: 12, message: 'ボディは12文字以内で入力してください' }
     })
 
     return errors
