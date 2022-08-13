@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { connect } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import { ConfigProps, Field, InjectedFormProps, reduxForm, WrappedFieldProps } from "redux-form";
@@ -17,47 +18,37 @@ interface DispatchProps {
 
 type EventNewFormProps = InjectedFormProps<EventNewInputValues, DispatchProps> & DispatchProps
 
-class EventNew extends React.Component<EventNewFormProps> {
-    // これ汚い！！！！
-    state = {
-        isEventCreated: false
+const EventNew: React.FC<EventNewFormProps> = (props: EventNewFormProps) => {
+    const [created, setCreated] = useState(false)
+
+    const onSubmit = async (values: EventNewInputValues) => {
+        await props.createEvent(values)
+        setCreated(true)
     }
 
-    constructor(props: EventNewFormProps) {
-        super(props)
-        this.onSubmit = this.onSubmit.bind(this)
-    }
+    const { handleSubmit, invalid, submitting } = props
 
-    async onSubmit(values: EventNewInputValues) {
-        await this.props.createEvent(values)
-        this.setState({ isEventCreated: true })
-    }
-
-    render() {
-        const { handleSubmit, invalid, submitting } = this.props
-        let { isEventCreated } = this.state
-        return (
-            <React.Fragment>
-                <Link to="/">イベント一覧</Link>
-                <h1>新規イベント作成</h1>
-                <form onSubmit={handleSubmit(this.onSubmit)}>
+    return (
+        <React.Fragment>
+            <Link to="/">イベント一覧</Link>
+            <h1>新規イベント作成</h1>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <div>
+                    <Field label="Title" name="title" type="text" component={RenderField} />
+                </div>
+                <div>
+                    <Field label="Body" name="body" type="text" component={RenderField} />
+                </div>
+                <div>
+                    <input type="submit" value="Submit" disabled={invalid || submitting}/>
                     <div>
-                        <Field label="Title" name="title" type="text" component={RenderField} />
+                        <Link to="/">キャンセル</Link>
                     </div>
-                    <div>
-                        <Field label="Body" name="body" type="text" component={RenderField} />
-                    </div>
-                    <div>
-                        <input type="submit" value="Submit" disabled={invalid || submitting}/>
-                        <div>
-                            <Link to="/">キャンセル</Link>
-                        </div>
-                    </div>
-                </form>
-                {isEventCreated && (<Navigate to="/" />)}
-            </React.Fragment>
-        )
-    }
+                </div>
+            </form>
+            {created && (<Navigate to="/" />)}
+        </React.Fragment>
+    )
 }
 
 const validate = (values: EventNewInputValues) => {
@@ -84,8 +75,8 @@ const mapStateToProps = (): ConfigProps<EventNewInputValues, DispatchProps> => {
 
 const mapDispatchToProps = (dispatch: Function): DispatchProps => {
     return {
-        createEvent: (values: EventNewInputValues) => {
-            dispatch(eventActions.createEventAsync(values))
+        createEvent: async (values: EventNewInputValues) => {
+            await dispatch(eventActions.createEventAsync(values))
         }
     }
 }

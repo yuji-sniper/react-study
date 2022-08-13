@@ -5,16 +5,14 @@ import { Event } from "../../types/Event";
 
 export interface EventShowState {
     event?: Event
-    deleted: boolean
 }
 
 const initialState: EventShowState = {
-    deleted: false
 }
 
 export const EventShowReducer = reducerWithInitialState(initialState)
-    .case(eventActions.initEventShowState, (state: EventShowState) => {
-        return { ...state, event: undefined, deleted: false }
+    .case(eventActions.initEventShow, (state: EventShowState, response: AxiosResponse<Event>) => {
+        return { ...state, event: response.data }
     })
     .case(eventActions.deleteEvent, (state: EventShowState, response: AxiosResponse) => {
         return { ...state, deleted: (response.status === 200) }

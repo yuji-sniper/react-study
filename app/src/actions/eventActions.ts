@@ -31,5 +31,11 @@ export const eventActions = {
             dispatch(eventActions.deleteEvent(response))
         }
     },
-    initEventShowState: actionCreator('INIT_EVENT_SHOW_STATE')
+    initEventShow: actionCreator<AxiosResponse<Event>>('INIT_EVENT_SHOW_STATE'),
+    initEventShowAsync: (id: string) => {
+        return async (dispatch: Dispatch) => {
+            const response: AxiosResponse<Event> = await axios.get(`${ROOT_URL}/events/${id}${QUERY_STRING}`)
+            dispatch(eventActions.initEventShow(response))
+        }
+    }
 }
