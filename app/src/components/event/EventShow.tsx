@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { eventActions } from "../../actions/eventActions";
