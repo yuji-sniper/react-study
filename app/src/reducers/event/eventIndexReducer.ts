@@ -1,12 +1,12 @@
 import { reducerWithInitialState } from "typescript-fsa-reducers"
-import { eventActions } from "../../actions/event"
+import { eventActions } from "../../actions/eventActions"
 import { Event } from "../../types/Event"
 
 export interface EventIndexState {
     events: Event[]
 }
 
-export const initialState: EventIndexState = {
+const initialState: EventIndexState = {
     events: []
 }
 

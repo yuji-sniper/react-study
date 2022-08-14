@@ -1,6 +1,6 @@
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
-import { countActions } from "../actions/count"
+import { countActions } from "../actions/countActions"
 import { Counter } from "../components/Counter"
 import { AppState } from "../store"
 

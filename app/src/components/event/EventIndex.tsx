@@ -1,7 +1,8 @@
 import React from "react";
+import { useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { eventActions } from "../../actions/event";
+import { eventActions } from "../../actions/eventActions";
 import { AppState } from "../../store";
 import { Event } from "../../types/Event";
 
@@ -10,28 +11,31 @@ interface Props {
     readEvents(): void
 }
 
-class EventIndex extends React.Component<Props> {
-    componentDidMount() {
-        this.props.readEvents()
-    }
+const EventIndex: React.FC<Props> = (props: Props) => {
+    useEffect(() => {
+        props.readEvents()
+    }, [])
 
-    render() {
-        return (
-            <React.Fragment>
-                <Link to="/events/new">新規イベント</Link>
-                <h1>「イベント一覧」</h1>
-                {this.props.events.map((event) => {
-                    return (
-                        <div key={event.id}>
-                            <h3>{event.id}：{event.title}</h3>
-                            <p>{event.body}</p>
-                            <hr></hr>
-                        </div>
-                    )
-                })}
-            </React.Fragment>
-        )
-    }
+    return (
+        <React.Fragment>
+            <Link to="/events/new">新規イベント</Link>
+            <h1>「イベント一覧」</h1>
+            {props.events.map((event) => {
+                return (
+                    <div key={event.id}>
+                        <h3>{event.id}</h3>
+                        <p>
+                            <Link to={`/event/${event.id}`}>
+                                {event.title}
+                            </Link>
+                        </p>
+                        <p>{event.body}</p>
+                        <hr></hr>
+                    </div>
+                )
+            })}
+        </React.Fragment>
+    )
 }
 
 const mapStateToProps = (appState: AppState) => {

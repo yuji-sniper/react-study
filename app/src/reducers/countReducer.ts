@@ -1,5 +1,5 @@
 import { reducerWithInitialState } from "typescript-fsa-reducers"
-import { countActions } from "../actions/count"
+import { countActions } from "../actions/countActions"
 
 export interface CountState {
     value: number
