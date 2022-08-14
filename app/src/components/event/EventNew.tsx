@@ -1,7 +1,6 @@
 import React from "react";
-import { useState } from "react";
 import { connect } from "react-redux";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ConfigProps, Field, InjectedFormProps, reduxForm, WrappedFieldProps } from "redux-form";
 import { eventActions } from "../../actions/eventActions";
 import { RenderField } from "../../field/RenderField";
