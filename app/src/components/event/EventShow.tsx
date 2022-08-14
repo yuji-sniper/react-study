@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { useState } from "react";
 import { connect } from "react-redux";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { ConfigProps, Field, InjectedFormProps, reduxForm } from "redux-form";
 import { eventActions } from "../../actions/eventActions";
 import { RenderField } from "../../field/RenderField";
@@ -15,8 +15,9 @@ export interface EventUpdateInputValues extends InputValues {
 }
 
 interface DispatchProps {
+    getEvent(id: string): void
+    updateEvent(id: string, values: EventUpdateInputValues): void
     deleteEvent(id: string): void
-    initEventShow(id: string): void
 }
 
 type Props = EventShowState & DispatchProps
@@ -25,22 +26,29 @@ type EventShowProps = InjectedFormProps<EventUpdateInputValues, Props> & Props
 
 const EventShow: React.FC<EventShowProps> = (props: EventShowProps) => {
     const params = useParams()
-
-    const [deleted, setDeleted] = useState(false)
+    const navigate = useNavigate()
+    const [deleting, setDeleting] = useState(false)
+    const { handleSubmit, pristine, invalid, submitting } = props
 
     useEffect(() => {
-        props.initEventShow(params.id!)
+        props.getEvent(params.id!)
     }, [])
 
     const onDeleteClick = async () => {
+        setDeleting(true)
         await props.deleteEvent(params.id!)
-        setDeleted(true)
+        navigate("/")
+    }
+
+    const onSubmit = async (values: EventUpdateInputValues) => {
+        await props.updateEvent(params.id!, values)
+        navigate("/")
     }
 
     return (
         <React.Fragment>
             <h1>イベント詳細</h1>
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <Field label="Title" name="title" type="text" component={RenderField} />
                 </div>
@@ -48,11 +56,11 @@ const EventShow: React.FC<EventShowProps> = (props: EventShowProps) => {
                     <Field label="Body" name="body" type="text" component={RenderField} />
                 </div>
                 <div>
-                    <input type="button" value="削除" onClick={onDeleteClick} />
+                    <input type="submit" value="更新" disabled={pristine || invalid || submitting} />
+                    <input type="button" value="削除" disabled={deleting} onClick={onDeleteClick} />
                     <Link to="/">キャンセル</Link>
                 </div>
             </form>
-            {deleted && (<Navigate to="/" />)}
         </React.Fragment>
     )
 }
@@ -89,8 +97,11 @@ const mapStateToProps = (appState: AppState): ConfigProps<EventUpdateInputValues
 
 const mapDispatchToProps = (dispatch: Function): DispatchProps => {
     return {
-        initEventShow: async (id: string) => {
-            await dispatch(eventActions.initEventShowAsync(id))
+        getEvent: async (id: string) => {
+            await dispatch(eventActions.getEventAsync(id))
+        },
+        updateEvent: async (id: string, values: EventUpdateInputValues) => {
+            await dispatch(eventActions.updateEventAsync(id, values))
         },
         deleteEvent: async (id: string) => {
             await dispatch(eventActions.deleteEventAsync(id))

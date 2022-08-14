@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { connect } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { ConfigProps, Field, InjectedFormProps, reduxForm, WrappedFieldProps } from "redux-form";
 import { eventActions } from "../../actions/eventActions";
 import { RenderField } from "../../field/RenderField";
@@ -19,14 +19,13 @@ interface DispatchProps {
 type EventNewFormProps = InjectedFormProps<EventNewInputValues, DispatchProps> & DispatchProps
 
 const EventNew: React.FC<EventNewFormProps> = (props: EventNewFormProps) => {
-    const [created, setCreated] = useState(false)
+    const navigate = useNavigate()
+    const { handleSubmit, pristine, invalid, submitting } = props
 
     const onSubmit = async (values: EventNewInputValues) => {
         await props.createEvent(values)
-        setCreated(true)
+        navigate("/")
     }
-
-    const { handleSubmit, invalid, submitting } = props
 
     return (
         <React.Fragment>
@@ -40,13 +39,12 @@ const EventNew: React.FC<EventNewFormProps> = (props: EventNewFormProps) => {
                     <Field label="Body" name="body" type="text" component={RenderField} />
                 </div>
                 <div>
-                    <input type="submit" value="Submit" disabled={invalid || submitting}/>
+                    <input type="submit" value="Submit" disabled={pristine || invalid || submitting}/>
                     <div>
                         <Link to="/">キャンセル</Link>
                     </div>
                 </div>
             </form>
-            {created && (<Navigate to="/" />)}
         </React.Fragment>
     )
 }
