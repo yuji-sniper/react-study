@@ -23,7 +23,7 @@ const requireParamValidations: string[] = [
     'regex'
 ]
 
-// バリデーションを実行しエラーメッセージを返す
+// 全入力値のバリデーションを実行しエラーメッセージを返す
 export const validateForm = <T extends InputValues> (
         values: T,
         validationRules: {[key in keyof T]: Rules}): {[key in keyof T]?: string|undefined} => {
