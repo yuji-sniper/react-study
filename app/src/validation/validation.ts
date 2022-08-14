@@ -1,4 +1,4 @@
-import { messageReplacers } from "./replacer"
+import { messageReplacers } from "./messageReplacer"
 import { validators } from "./validator"
 
 // 各入力値の型
