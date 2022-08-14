@@ -1,10 +1,13 @@
-import React from "react";
+import { Button, Typography } from "@mui/material";
+import React, { useMemo } from "react";
 import { useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { eventActions } from "../../actions/eventActions";
 import { AppState } from "../../store";
 import { Event } from "../../types/Event";
+import { BaseTable, BaseTableHeader, BaseTableRow } from "../basic/BaseTable";
 
 interface Props {
     events: Event[]
@@ -12,28 +15,43 @@ interface Props {
 }
 
 const EventIndex: React.FC<Props> = (props: Props) => {
+    const navigate = useNavigate()
+
     useEffect(() => {
         props.readEvents()
     }, [])
 
+    const renderTitleLink = (event: Event) => (
+        <Link key={event.id} to={`/event/${event.id}`}>
+            {event.title}
+        </Link>
+    )
+
+    const header: BaseTableHeader = {
+        id: 'ID',
+        title: 'Title',
+        body: 'Body'
+    }
+
+    const rows: BaseTableRow[] = useMemo(() => {
+        return props.events.map((event: Event) => (
+            {
+                id: event.id,
+                title: renderTitleLink(event),
+                body: event.body
+            }
+        ))
+    }, [props.events])
+
     return (
         <React.Fragment>
-            <Link to="/events/new">新規イベント</Link>
-            <h1>「イベント一覧」</h1>
-            {props.events.map((event) => {
-                return (
-                    <div key={event.id}>
-                        <h3>{event.id}</h3>
-                        <p>
-                            <Link to={`/event/${event.id}`}>
-                                {event.title}
-                            </Link>
-                        </p>
-                        <p>{event.body}</p>
-                        <hr></hr>
-                    </div>
-                )
-            })}
+            <Typography variant="h2" component="div" gutterBottom>
+                イベント一覧
+            </Typography>
+            <BaseTable header={header} rows={rows} />
+            <Button variant="outlined" onClick={() => navigate('/events/new')}>
+                新規イベント作成
+            </Button>
         </React.Fragment>
     )
 }
@@ -46,8 +64,8 @@ const mapStateToProps = (appState: AppState) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
     return {
-        readEvents: () => {
-            dispatch(eventActions.readEventsAsync())
+        readEvents: async () => {
+            await dispatch(eventActions.readEventsAsync())
         }
     }
 }

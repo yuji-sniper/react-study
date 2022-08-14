@@ -1,7 +1,8 @@
-import React, { ReactElement, useEffect } from "react";
+import { Button, ButtonGroup, Typography } from "@mui/material";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { connect } from "react-redux";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ConfigProps, Field, InjectedFormProps, reduxForm } from "redux-form";
 import { eventActions } from "../../actions/eventActions";
 import { RenderField } from "../../field/RenderField";
@@ -47,7 +48,9 @@ const EventShow: React.FC<EventShowProps> = (props: EventShowProps) => {
 
     return (
         <React.Fragment>
-            <h1>イベント詳細</h1>
+            <Typography variant="h2" component="div" gutterBottom>
+                イベント詳細
+            </Typography>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <Field label="Title" name="title" type="text" component={RenderField} />
@@ -55,11 +58,17 @@ const EventShow: React.FC<EventShowProps> = (props: EventShowProps) => {
                 <div>
                     <Field label="Body" name="body" type="text" component={RenderField} />
                 </div>
-                <div>
-                    <input type="submit" value="更新" disabled={pristine || invalid || submitting} />
-                    <input type="button" value="削除" disabled={deleting} onClick={onDeleteClick} />
-                    <Link to="/">キャンセル</Link>
-                </div>
+                <ButtonGroup variant="outlined" aria-label="outlined button group">
+                    <Button type="submit" disabled={pristine || invalid || submitting}>
+                        更新
+                    </Button>
+                    <Button disabled={deleting} onClick={onDeleteClick}>
+                        削除
+                    </Button>
+                    <Button onClick={() => navigate('/')}>
+                        キャンセル
+                    </Button>
+                </ButtonGroup>
             </form>
         </React.Fragment>
     )
