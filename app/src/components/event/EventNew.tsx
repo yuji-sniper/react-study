@@ -1,6 +1,7 @@
+import { Button, Link, Typography } from "@mui/material";
 import React from "react";
 import { connect } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ConfigProps, Field, InjectedFormProps, reduxForm, WrappedFieldProps } from "redux-form";
 import { eventActions } from "../../actions/eventActions";
 import { RenderField } from "../../field/RenderField";
@@ -28,8 +29,9 @@ const EventNew: React.FC<EventNewFormProps> = (props: EventNewFormProps) => {
 
     return (
         <React.Fragment>
-            <Link to="/">イベント一覧</Link>
-            <h1>新規イベント作成</h1>
+            <Typography variant="h2" component="div" gutterBottom>
+                新規イベント作成
+            </Typography>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <Field label="Title" name="title" type="text" component={RenderField} />
@@ -38,10 +40,12 @@ const EventNew: React.FC<EventNewFormProps> = (props: EventNewFormProps) => {
                     <Field label="Body" name="body" type="text" component={RenderField} />
                 </div>
                 <div>
-                    <input type="submit" value="Submit" disabled={pristine || invalid || submitting}/>
-                    <div>
-                        <Link to="/">キャンセル</Link>
-                    </div>
+                    <Button type="submit" variant="outlined" disabled={pristine || invalid || submitting}>
+                        作成
+                    </Button>
+                    <Button variant="outlined" onClick={() => navigate('/')}>
+                        キャンセル
+                    </Button>
                 </div>
             </form>
         </React.Fragment>

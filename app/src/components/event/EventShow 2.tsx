@@ -1,8 +1,7 @@
-import { Button, ButtonGroup, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { useState } from "react";
 import { connect } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { ConfigProps, Field, InjectedFormProps, reduxForm } from "redux-form";
 import { eventActions } from "../../actions/eventActions";
 import { RenderField } from "../../field/RenderField";
@@ -48,9 +47,7 @@ const EventShow: React.FC<EventShowProps> = (props: EventShowProps) => {
 
     return (
         <React.Fragment>
-            <Typography variant="h2" component="div" gutterBottom>
-                イベント詳細
-            </Typography>
+            <h1>イベント詳細</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <Field label="Title" name="title" type="text" component={RenderField} />
@@ -58,17 +55,11 @@ const EventShow: React.FC<EventShowProps> = (props: EventShowProps) => {
                 <div>
                     <Field label="Body" name="body" type="text" component={RenderField} />
                 </div>
-                <ButtonGroup variant="outlined" aria-label="outlined button group">
-                    <Button type="submit" disabled={pristine || invalid || submitting}>
-                        更新
-                    </Button>
-                    <Button disabled={deleting} onClick={onDeleteClick}>
-                        削除
-                    </Button>
-                    <Button onClick={() => navigate('/')}>
-                        キャンセル
-                    </Button>
-                </ButtonGroup>
+                <div>
+                    <input type="submit" value="更新" disabled={pristine || invalid || submitting} />
+                    <input type="button" value="削除" disabled={deleting} onClick={onDeleteClick} />
+                    <Link to="/">キャンセル</Link>
+                </div>
             </form>
         </React.Fragment>
     )
